@@ -25,14 +25,12 @@ def getOpenAIModel41() -> ChatOpenAI:
 
     cfg = load_yaml("config/model_config.yaml")
     auth_cfg = cfg["auth"]
+    model_cfg = cfg["model_gateway"]
 
     token = get_bearer_token(auth_cfg, username=username, password=password)
 
-    model_cfg = cfg["model_gateway"]
-    root_url = model_cfg["root_url"]
-    deployment_name = model_cfg["deployment_name"]
+    base_url = model_cfg["base_url"]
     api_version = model_cfg["api_version"]
-    base_url = f"{root_url}/openai/deployments/{deployment_name}"
     default_query = {"api-version": api_version}
     return ChatOpenAI(base_url=base_url, api_key=token, default_query=default_query)
   
