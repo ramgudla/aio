@@ -80,7 +80,7 @@ The alternatives are:
 
 3) Run the agent orchestrator.
      ```
-     agentorchestrator
+     rgai
      ```
 
 ######################################
