@@ -10,10 +10,10 @@ Test a wheel          :   uvx dist/rgai-0.1.0-py3-none-any.whl
 
 Install a wheel       :   uv pip install dist/rgai-0.1.0-py3-none-any.whl
 Uninstall a package   :   uv pip uninstall rgai
+```
 
 # Install UV
 We recommend installing uv globally with pip:
-```
 
 ```
 pip install uv
