@@ -2,7 +2,7 @@ import requests
 from typing import Any, Dict
 
 def get_bearer_token(auth_cfg: Dict[str, Any], username: str, password: str) -> str:
-    """Obtain bearer token using password grant, mirroring data_agent_lite behavior.
+    """Obtain bearer token using password grant.
 
     auth_cfg must provide: token_url, token_scope, token_basic_auth
     """
