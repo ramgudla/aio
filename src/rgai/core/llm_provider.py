@@ -20,8 +20,8 @@ def getChatOpenAIModel() -> ChatOpenAI:
     client_id = os.getenv("OAUTH_CLIENT_ID")
     client_secret = os.getenv("OAUTH_CLIENT_SECRET")
 
-    auth_cfg = cfg["oauth"]
     model_cfg = cfg["openai"]
+    auth_cfg = model_cfg["oauth"]
 
     token = get_api_key(auth_cfg, client_id=client_id, client_secret=client_secret, username=username, password=password)
 
