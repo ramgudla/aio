@@ -135,9 +135,3 @@ def entry_point():
 if __name__ == "__main__":
     # asyncio.run(chat_ui())
     asyncio.run(input_loop())
-
-# Example user queries to test the graph:
-# calculate the result of 3 + 5
-# Get the details of jira id RG-3552 from the RG project queue.
-# Summarize the jira issue RG-457
-# Summarize the jira issue EHRM-3552 from the jira-sd project queue.

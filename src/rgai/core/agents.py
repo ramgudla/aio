@@ -3,7 +3,7 @@ from langchain.agents import create_agent
 from deepagents import create_deep_agent
 from langchain_core.tools import tool
 
-from rgai.core.llm_provider import LLMRegistry
+from rgai.core.llm_provider import LLMFactory
 from rgai.util.utils import get_tools
 
 # ===================================== #
@@ -17,21 +17,22 @@ SUBAGENTS = subagents_config["subagents"]
 SUBAGENTS_CAPABILITIES = subagents_config["subagents_capabilities"]
 SUBAGENTS_PROMPTS = subagents_config["subagents_prompts"]
 SUPERVISOR_PROMPT = subagents_config["supervisor_prompt"]
-MCPSERVERS = subagents_config["mcpServers"]
+MCP_SERVERS = subagents_config["mcpServers"]
+MODEL_PROVIDER = subagents_config["model_provider"]
 
 # ===================================== #
 #               MODEL
 # ===================================== #
 
 # The model is the reasoning engine of your agent.
-llm = LLMRegistry.get("gpt-41")
+llm = LLMFactory.create_llm(MODEL_PROVIDER)
 
 # ===================================== #
 #               TOOLS
 # ===================================== #
 
 # Tools give agents the ability to take actions.
-tools = get_tools(MCPSERVERS)
+tools = get_tools(MCP_SERVERS)
 
 # ===================================== #
 #     SUBAGENTS AS TOOLS
