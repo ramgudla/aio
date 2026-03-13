@@ -14,13 +14,16 @@ OPEN_AI_PROXY_PASSWORD=...
 uv venv --python 3.13
 source .venv/bin/activate
 
-Clean uv cache        :   uv clean
-Build a wheel         :   uv build
-Test a wheel          :   uvx dist/rgai-0.1.0-py3-none-any.whl
-Oneliner              :   uv clean; uv build; uvx dist/rgai-0.1.0-py3-none-any.whl
+Clean uv cache           :   uv clean
+Build a wheel            :   uv build
 
-Install a wheel       :   uv pip install dist/rgai-0.1.0-py3-none-any.whl
-Uninstall a package   :   uv pip uninstall rgai
+Run a script from
+  - working tree         :   uv run aio_bot
+  - a wheel              :   uvx --from dist/aio-0.1.0-py3-none-any.whl aio_bot      
+  - project in directory :   uvx --find-links dist --from aio aio_bot
+
+Install a wheel          :   uv pip install dist/aio-0.1.0-py3-none-any.whl
+Uninstall a wheel        :   uv pip uninstall aio
 ```
 
 ### Install UV
@@ -86,13 +89,14 @@ pip install setuptools wheel build
 2) Install your package.
 
  ```
- uv pip install dist/rgai-0.1.0-py3-none-any.whl   # to install from the built wheel
- uv pip uninstall rgai   # to uninstall the installed package.
+ uv pip install dist/aio-0.1.0-py3-none-any.whl   # to install from the built wheel
+ uv pip uninstall aio   # to uninstall the installed package.
  ```
 
-3) Run the agent orchestrator.
+3) Run the ai orchestrator.
  ```
- rgai
+ aio_cli
+ aio_bot
  ```
 
 ## For distribution to others, publish it to the Python Package Index (PyPI)
@@ -137,17 +141,47 @@ username = root
 3) Install package from ```devpi``` Index
 
 ```
-uvx --index http://0.0.0.0:3141/root/dev/+simple/ rgai@latest
-uvx --index http://0.0.0.0:3141/root/dev/ rgai
-uv tool run --index http://0.0.0.0:3141/root/dev/ rgai
+uvx --index http://0.0.0.0:3141/root/dev/+simple/ aio@latest
+uvx --index http://0.0.0.0:3141/root/dev/ aio
+uv tool run --index http://0.0.0.0:3141/root/dev/ aio
 
 (or)
 
 export PIP_INDEX_URL=http://localhost:3141/root/dev/
-uvx rgai
+uvx aio
 
 (or)
 
 pip install -i http://localhost:3141/root/pypi/+simple/ your-package-name
-e.g., pip install -i http://localhost:3141/root/dev/+simple/ rgai --verbose
+e.g., pip install -i http://localhost:3141/root/dev/+simple/ aio --verbose
 ```
+
+### UV Notes:
+
+When you run below commands from workspace root, you will observe errors outlined below:
+
+1) ```uvx dist/aio-0.1.0-py3-none-any.whl```
+Installed 120 packages in 878ms
+An executable named ```aio``` is not provided by package aio.
+The following executables are available:
+
+    ```- aio_cli```
+
+    ```- aio_bot```
+
+
+Use uvx --from aio <EXECUTABLE-NAME> instead.
+
+**Resolution:**
+uvx dist/aio-0.1.0-py3-none-any.whl installs the wheel, then (because no command name follows) tries to execute a console script named ```aio``` (the project name). That script doesn’t exist in the wheel, so uvx prints the reminder that only ```aio_cli``` and ```aio_bot``` are exposed.
+Tell uvx which script you want: e.g. ```uvx --from dist/aio-0.1.0-py3-none-any.whl aio_cli``` or ```uvx --from dist/aio-0.1.0-py3-none-any.whl aio_bot```.
+If you’re already in the project tree, an easier option is ```uv run aio_cli``` or ```uv run aio_bot```; uv will reuse the local project rather than reinstalling from the wheel.
+
+2) ```uvx --from aio aio_cli```
+  × No solution found when resolving tool dependencies:
+  ╰─▶ Because there are no versions of aio and you require aio, we can conclude that your requirements are unsatisfiable.
+
+**Resolution:**
+uvx --from aio … tells uv to resolve a published package literally named ```aio```. PyPI (and any other configured index) has no distributions with that name, so dependency resolution stops with “no versions of ```aio```”.
+The repo you’re in is just a local project; uvx doesn’t look at your working tree. To run its console entry points, stay in the project root and use ```uv run aio_cli``` (uv loads the current project’s environment) or fall back to ```python -m aio.core.cli``` if you prefer the module form.
+If you really need the uvx workflow, you’d first have to make the project installable somewhere uv can reach —- e.g., build a wheel (```uv build```), then ```uvx --find-links dist --from aio aio_cli```, or publish the package to an index under the name ```aio```.
