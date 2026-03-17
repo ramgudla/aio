@@ -18,9 +18,9 @@ Clean uv cache           :   uv clean
 Build a wheel            :   uv build
 
 Run a script from
-  - working tree         :   uv run aio_bot
-  - a wheel              :   uvx --from dist/aio-0.1.0-py3-none-any.whl aio_bot      
-  - project in directory :   uvx --find-links dist --from aio aio_bot
+  - working tree         :   uv run aio_cli
+  - a wheel              :   uvx --from dist/aio-0.1.0-py3-none-any.whl aio_cli      
+  - project in directory :   uvx --find-links dist --from aio aio_cli
 
 Install a wheel          :   uv pip install dist/aio-0.1.0-py3-none-any.whl
 Uninstall a wheel        :   uv pip uninstall aio
@@ -95,7 +95,7 @@ pip install setuptools wheel build
 
 3) Run the ai orchestrator.
  ```
- aio_bot
+ aio_cli
  ```
 
 ## For distribution to others, publish it to the Python Package Index (PyPI)
@@ -164,21 +164,21 @@ Installed 120 packages in 878ms
 An executable named ```aio``` is not provided by package aio.
 The following executables are available:
 
-    ```- aio_bot```
+    ```- aio_cli```
 
 
 Use uvx --from aio <EXECUTABLE-NAME> instead.
 
 **Resolution:**
-uvx dist/aio-0.1.0-py3-none-any.whl installs the wheel, then (because no command name follows) tries to execute a console script named ```aio``` (the project name). That script doesn’t exist in the wheel, so uvx prints the reminder that only ```aio_bot``` is exposed.
-Tell uvx which script you want: e.g. ```uvx --from dist/aio-0.1.0-py3-none-any.whl aio_bot```.
-If you’re already in the project tree, an easier option is ```uv run aio_bot```; uv will reuse the local project rather than reinstalling from the wheel.
+uvx dist/aio-0.1.0-py3-none-any.whl installs the wheel, then (because no command name follows) tries to execute a console script named ```aio``` (the project name). That script doesn’t exist in the wheel, so uvx prints the reminder that only ```aio_cli``` is exposed.
+Tell uvx which script you want: e.g. ```uvx --from dist/aio-0.1.0-py3-none-any.whl aio_cli```.
+If you’re already in the project tree, an easier option is ```uv run aio_cli```; uv will reuse the local project rather than reinstalling from the wheel.
 
-2) ```uvx --from aio aio_bot```
+2) ```uvx --from aio aio_cli```
   × No solution found when resolving tool dependencies:
   ╰─▶ Because there are no versions of aio and you require aio, we can conclude that your requirements are unsatisfiable.
 
 **Resolution:**
 uvx --from aio … tells uv to resolve a published package literally named ```aio```. PyPI (and any other configured index) has no distributions with that name, so dependency resolution stops with “no versions of ```aio```”.
-The repo you’re in is just a local project; uvx doesn’t look at your working tree. To run its console entry points, stay in the project root and use ```uv run aio_bot``` (uv loads the current project’s environment) or fall back to ```python -m aio.core.cli``` if you prefer the module form.
-If you really need the uvx workflow, you’d first have to make the project installable somewhere uv can reach —- e.g., build a wheel (```uv build```), then ```uvx --find-links dist --from aio aio_bot```, or publish the package to an index under the name ```aio```.
+The repo you’re in is just a local project; uvx doesn’t look at your working tree. To run its console entry points, stay in the project root and use ```uv run aio_cli``` (uv loads the current project’s environment) or fall back to ```python -m aio.core.cli``` if you prefer the module form.
+If you really need the uvx workflow, you’d first have to make the project installable somewhere uv can reach —- e.g., build a wheel (```uv build```), then ```uvx --find-links dist --from aio aio_cli```, or publish the package to an index under the name ```aio```.
