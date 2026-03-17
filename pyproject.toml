@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-aio_bot = "aio.core.cli:main"
+aio_cli = "aio.core.cli:main"
 
 [build-system]
 requires = ["setuptools", "wheel"]
